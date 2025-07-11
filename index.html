@@ -1,21 +1,52 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" class="">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>个人主页 · 吴优</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>优酱的小屋</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // 配置 Tailwind 暗黑模式为 class 触发
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            orange: {
+              DEFAULT: '#FFA500'
+            }
+          }
+        }
+      }
+    }
+  </script>
   <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
     body {
       background: url('background.jpg') no-repeat center center fixed;
       background-size: cover;
       overflow-x: hidden;
       font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-        cursor: url('orange-icon-small.png') 8 8, auto;
+      cursor: url('orange-icon-small.png') 8 8, auto;
+      position: relative;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease;
     }
 
-    /* 雪花动画 */
+    /* 粒子背景容器，铺满全屏且置于底层 */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -10;
+      /* 确保在最底层 */
+    }
+
     .snowflake {
       position: fixed;
       top: -10px;
@@ -31,6 +62,7 @@
         transform: translateY(0) rotate(0deg);
         opacity: 1;
       }
+
       100% {
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
@@ -38,7 +70,18 @@
     }
   </style>
 </head>
-<body class="text-gray-800">
+
+<body class="text-gray-800 dark:text-gray-200 dark:bg-gray-900 transition-colors duration-300">
+
+  <!-- 粒子背景 -->
+  <div id="particles-js"></div>
+
+  <!-- 暗黑模式切换按钮 -->
+  <button id="darkModeToggle"
+    class="fixed top-4 right-4 z-30 p-2 rounded-full bg-white/70 dark:bg-gray-800/70 text-gray-800 dark:text-gray-200 shadow-lg hover:bg-white dark:hover:bg-gray-700 transition"
+    aria-label="切换暗黑模式" title="切换暗黑模式">
+    <i data-lucide="moon" id="darkModeIcon" class="w-6 h-6"></i>
+  </button>
 
   <!-- 雪花 -->
   <script>
@@ -57,88 +100,217 @@
   </script>
 
   <!-- Sidebar -->
-  <aside class="fixed top-0 left-0 w-16 h-screen bg-white/70 backdrop-blur-md text-gray-800 flex flex-col justify-between p-4 shadow-xl z-20">
+  <aside
+    class="fixed top-0 left-0 w-16 h-screen bg-white/70 dark:bg-gray-800/70 backdrop-blur-md text-gray-800 dark:text-gray-200 flex flex-col justify-between p-4 shadow-xl z-20 transition-colors duration-300">
     <div>
       <div class="flex justify-center text-2xl mb-10">❄</div>
       <nav class="flex flex-col items-center space-y-6 text-sm">
-        <a href="#about" class="group text-center hover:text-teal-600 transition">
+        <a href="#about" class="group text-center hover:text-teal-600 dark:hover:text-teal-400 transition">
           <i data-lucide="user" class="w-5 h-5 mx-auto mb-1 group-hover:scale-110 transition"></i>
           关于
         </a>
-        <a href="#projects" class="group text-center hover:text-teal-600 transition">
+        <a href="#music" class="group text-center hover:text-teal-600 dark:hover:text-teal-400 transition">
+          <i data-lucide="music" class="w-5 h-5 mx-auto mb-1 group-hover:scale-110 transition"></i>
+          歌曲
+        </a>
+        <a href="#projects" class="group text-center hover:text-teal-600 dark:hover:text-teal-400 transition">
           <i data-lucide="rocket" class="w-5 h-5 mx-auto mb-1 group-hover:scale-110 transition"></i>
           项目
         </a>
-        <a href="#contact" class="group text-center hover:text-teal-600 transition">
+        <a href="#contact" class="group text-center hover:text-teal-600 dark:hover:text-teal-400 transition">
           <i data-lucide="mail" class="w-5 h-5 mx-auto mb-1 group-hover:scale-110 transition"></i>
           联系
         </a>
       </nav>
     </div>
-    <p class="text-xs text-center text-gray-400">&copy; 2025 优酱</p>
+    <p class="text-xs text-center text-gray-400 dark:text-gray-500">&copy; 2025 优酱</p>
   </aside>
-
 
   <!-- Main Content -->
   <main class="ml-16 p-10 relative z-10">
-<!-- About -->
-<section id="about" class="mb-16">
-  <h2 class="text-3xl font-bold mb-2 text-white">🍊关于我</h2>
-  <div id="typewriter" class="text-white text-lg mb-4" style="font-family: monospace; white-space: nowrap; overflow: hidden; border-right: 3px solid white;"></div>
-  <div class="bg-white/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
-    <p class="text-slate-700 leading-relaxed text-lg">
-      我是一名后端开发工程师，擅长 Java、Spring Boot、Redis、PostgreSQL、OpenResty。
-      喜欢骑摩托🏍️，折腾服务器和 Lua 网关脚本，偶尔也会写博客记录成长与灵感。
-    </p>
-  </div>
-</section>
-
-<script>
-  const text = "欢迎来到优酱的技术世界，探索代码与创意的无限可能！";
-  let i = 0;
-  const speed = 80; // 打字速度，数值越小越快
-  function typeWriter() {
-    if (i < text.length) {
-      document.getElementById("typewriter").innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeWriter, speed);
-    }
-  }
-  document.addEventListener("DOMContentLoaded", () => {
-    typeWriter();
-  });
-</script>
-
-    <!-- Projects -->
-    <section id="projects" class="mb-16">
-      <h2 class="text-3xl font-bold mb-6 text-white">🚀 项目展示</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-          <h3 class="font-bold text-lg mb-2">Redis 集群监控平台</h3>
-          <p class="text-slate-700">基于 Lua + OpenResty 构建的轻量监控界面，支持集群实时状态与慢查询分析。</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition">
-          <h3 class="font-bold text-lg mb-2">FOLIO 一键部署脚本</h3>
-          <p class="text-slate-700">用于快速搭建 FOLIO 多模块环境，自动配置 okapi、Nginx 与模块 enable 流程。</p>
-        </div>
+    <!-- About -->
+    <section id="about" class="mb-16">
+      <h2 class="text-3xl font-bold mb-2 text-white dark:text-orange-400">🍊关于我</h2>
+      <div id="typewriter" class="text-white dark:text-orange-300 text-lg mb-4"
+        style="font-family: monospace; white-space: nowrap; overflow: hidden; border-right: 3px solid white;"></div>
+      <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+        <p class="text-slate-700 dark:text-gray-300 leading-relaxed text-lg">
+          我是一名热衷于后端技术的开发者，精通 Java、Spring Boot、Redis、PostgreSQL 与
+          OpenResty，致力于打造高效、稳定的服务架构。生活中，我喜欢骑行摩托🏍️，感受风与速度的自由；闲暇时刻，折腾服务器与 Lua
+          网关脚本，探索技术背后的无限可能。同时，我也热爱记录成长与灵感，将点滴积累汇聚成文字，分享给志同道合的你。
+        </p>
       </div>
     </section>
 
+    <!-- music -->
+    <section id="music" class="mb-16">
+      <h2 class="text-3xl font-bold mb-4 text-white dark:text-orange-400">🎵 歌曲推荐</h2>
+      <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="100%" height="110"
+        src="https://music.163.com/outchain/player?type=2&id=2617703637&auto=0&loop=true&height=66">
+      </iframe>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="mb-16">
+      <h2 class="text-3xl font-bold mb-6 text-white dark:text-orange-400">🚀 项目展示</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-200">Redis 集群监控平台</h3>
+          <p class="text-slate-700 dark:text-gray-300">
+            该平台基于 Lua 与 OpenResty 构建，提供简洁直观的界面，实时展示 Redis
+            集群的运行状态、性能指标和慢查询详情。通过精准的数据分析与告警机制，帮助运维快速定位性能瓶颈与故障，提高集群稳定性与响应速度。项目注重轻量化设计，易于部署与扩展，是高效管理 Redis 生态的重要利器。
+          </p>
+        </div>
+
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-200">FOLIO 一键部署脚本</h3>
+          <p class="text-slate-700 dark:text-gray-300">
+            此脚本专为快速搭建 FOLIO 多模块环境设计，实现了自动化配置 okapi 网关、Nginx
+            反向代理及模块启用流程。大幅简化部署步骤，提升开发与测试效率，支持灵活定制与扩展。适合团队快速搭建完整的图书馆管理系统环境，加速项目上线和迭代。
+          </p>
+        </div>
+
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-200">Lua API 网关插件</h3>
+          <p class="text-slate-700 dark:text-gray-300">
+            开发了一套基于 OpenResty 的 Lua API 网关插件，支持身份验证、请求限流、日志记录及动态路由等功能。通过灵活配置，实现对微服务的统一管理与安全防护，大幅提升系统的可维护性和扩展能力。
+          </p>
+        </div>
+
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-200">服务器自动化运维脚本</h3>
+          <p class="text-slate-700 dark:text-gray-300">
+            编写多套 Shell 和 Python 自动化脚本，实现服务器巡检、日志收集与故障报警自动化。通过定时任务与邮件通知，大幅提升运维效率，降低人工误操作风险，确保服务器稳定高效运行。
+          </p>
+        </div>
+
+        <div
+          class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+          <h3 class="font-bold text-lg mb-2 text-gray-900 dark:text-gray-200">个人技术博客平台</h3>
+          <p class="text-slate-700 dark:text-gray-300">
+            基于静态网站生成器搭建个人博客，集成 Markdown 支持、代码高亮及评论系统。分享开发经验与技术心得，助力持续学习与成长，同时实现简洁美观的阅读体验。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+
     <!-- Contact -->
-    <section id="contact">
-      <h2 class="text-3xl font-bold mb-4 text-white">📫 联系方式</h2>
-      <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition">
-        <p class="text-lg text-slate-700 space-y-2">
-          📮 Email: <a href="mailto:765029758@qq.com" class="text-cyan-600 underline">765029758@qq.com</a><br />
-          🐱 GitHub: <a href="https://github.com/wuyou1203" class="text-cyan-600 underline" target="_blank">wuyou1203</a>
+    <section id="contact" class="mb-16">
+      <h2 class="text-3xl font-bold mb-4 text-white dark:text-orange-400">📫 联系方式</h2>
+      <div class="bg-white/70 dark:bg-gray-800/70 backdrop-blur-md p-6 rounded-xl shadow-lg hover:shadow-xl transition">
+        <p class="text-lg text-slate-700 dark:text-gray-300 space-y-2">
+          📮 Email: <a href="mailto:765029758@qq.com"
+            class="text-cyan-600 dark:text-cyan-400 underline">765029758@qq.com</a><br />
+          🐱 GitHub: <a href="https://github.com/wuyou1203" class="text-cyan-600 dark:text-cyan-400 underline"
+            target="_blank">wuyou1203</a>
         </p>
       </div>
     </section>
   </main>
 
-  <!-- 初始化图标 -->
+  <!-- JS Scripts -->
   <script>
     lucide.createIcons();
+
+    // 打字机效果
+    const text = "在逻辑与秩序的世界中探索无限可能，代码是我与世界对话的语言。";
+    let i = 0;
+    const speed = 80;
+    function typeWriter() {
+      if (i < text.length) {
+        document.getElementById("typewriter").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(typeWriter, speed);
+      }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+      typeWriter();
+    });
+
+    // 初始化粒子背景
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: '#FFA500' },
+        shape: { type: 'circle' },
+        opacity: { value: 0.5, random: true },
+        size: { value: 4, random: true },
+        line_linked: {
+          enable: true,
+          distance: 120,
+          color: '#FFA500',
+          opacity: 0.3,
+          width: 1
+        },
+        move: {
+          enable: true,
+          speed: 3,
+          direction: 'none',
+          random: false,
+          straight: false,
+          bounce: true,
+          attract: { enable: false }
+        }
+      },
+      interactivity: {
+        detect_on: 'canvas',
+        events: {
+          onhover: { enable: true, mode: 'grab' },
+          onclick: { enable: true, mode: 'push' }
+        },
+        modes: {
+          grab: { distance: 140, line_linked: { opacity: 0.7 } },
+          push: { particles_nb: 4 }
+        }
+      },
+      retina_detect: true
+    });
+
+    // 暗黑模式切换逻辑
+    const toggleBtn = document.getElementById('darkModeToggle');
+    const htmlEl = document.documentElement;
+    const iconEl = document.getElementById('darkModeIcon');
+
+    function updateIcon() {
+      if (htmlEl.classList.contains('dark')) {
+        iconEl.setAttribute('data-lucide', 'sun');
+      } else {
+        iconEl.setAttribute('data-lucide', 'moon');
+      }
+      lucide.createIcons();
+    }
+
+    function setDarkMode(enabled) {
+      if (enabled) {
+        htmlEl.classList.add('dark');
+        localStorage.setItem('darkMode', 'enabled');
+      } else {
+        htmlEl.classList.remove('dark');
+        localStorage.setItem('darkMode', 'disabled');
+      }
+      updateIcon();
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const enabled = htmlEl.classList.contains('dark');
+      setDarkMode(!enabled);
+    });
+
+    // 页面加载时读取本地存储的暗黑模式状态
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
   </script>
 </body>
+
 </html>
